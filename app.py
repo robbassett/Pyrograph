@@ -9,6 +9,7 @@ import dash_daq as daq
 import plotly.graph_objects as go
 
 app = dash.Dash('Pyrograph')
+server = app.server
 pyro = 0
 
 def description_card():
