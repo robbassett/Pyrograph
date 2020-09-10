@@ -8,7 +8,7 @@ import dash_daq as daq
 
 import plotly.graph_objects as go
 
-app = dash.Dash('Pyrograph')
+app = dash.Dash(__name__)
 server = app.server
 pyro = 0
 
