@@ -220,4 +220,5 @@ def update_pyrograph(btn,fig,sz,ho,cl):
     return fig
 
 if __name__ == '__main__':
-    app.run_server(host='127.0.0.1',debug=True)
+    #app.run_server(host='127.0.0.1',debug=True)
+    app.run_server()
