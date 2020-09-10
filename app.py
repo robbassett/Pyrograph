@@ -46,7 +46,7 @@ def knob_card():
         id="knob-card",
         children=[
             daq.Knob(
-                value=-1.0,
+                value=.66,
                 label='Wheel Size',
                 id='size-input',
                 labelPosition='bottom',
@@ -56,7 +56,7 @@ def knob_card():
                 className='five columns',
             ),
              daq.Knob(
-                value=-1.0,
+                value=.66,
                 label='Hole Position',
                 id='hole-input',
                 labelPosition='bottom',
@@ -75,13 +75,13 @@ def led_card():
             daq.LEDDisplay(
                 id="size-display",
                 size=32,
-                value=-1.0,
+                value=0.66,
                 className="six columns",
             ),
             daq.LEDDisplay(
                 id="hole-display",
                 size=32,
-                value=-1.0,
+                value=0.66,
                 className="six columns",
             ),
         ],
@@ -204,24 +204,21 @@ def update_pyrograph(btn,fig,sz,ho,cl):
             height=800
         )
     
+    elif btn == 1:
+        fig = go.Figure(fig)
+        pyro = Pyrograph(hole=ho,inner_frac=sz)
+        for i in range(2): pyro.one_orbit()
+
+        fig.add_trace(go.Scatter(x=pyro.x[-1],y=pyro.y[-1],mode='lines',line=dict(color=cl['hex'])))
+        
+        
+        
     else:
+        fig = go.Figure(fig)
+        pyro.one_orbit()
+        fig.add_trace(go.Scatter(x=pyro.x[-1],y=pyro.y[-1],mode='lines',line=dict(color=cl['hex'])))
 
-        if ho != -1.0:
-            if btn == 1:
-                fig = go.Figure(fig)
-                pyro = Pyrograph(hole=ho,inner_frac=sz)
-                for i in range(2): pyro.one_orbit()
-
-                fig.add_trace(go.Scatter(x=pyro.x[-1],y=pyro.y[-1],mode='lines',line=dict(color=cl['hex'])))
-        
-        
-        
-            else:
-                fig = go.Figure(fig)
-                pyro.one_orbit()
-                fig.add_trace(go.Scatter(x=pyro.x[-1],y=pyro.y[-1],mode='lines',line=dict(color=cl['hex'])))
-
-        return fig
+    return fig
 
 if __name__ == '__main__':
     #app.run_server(host='127.0.0.1',debug=True)
