@@ -223,7 +223,7 @@ def update_pyrograph(btn,fig,sz,ho,cl):
             height=800
         )
 
-    """
+    
     elif btn == 1:
         fig = go.Figure(fig)
         pyro = Pyrograph(hole=ho,inner_frac=sz)
@@ -235,12 +235,12 @@ def update_pyrograph(btn,fig,sz,ho,cl):
         pyro = Pyrograph(hole=ho,inner_frac=sz)
         for i in range(btn+1): pyro.one_orbit()
         fig.add_trace(go.Scatter(x=pyro.x[-1],y=pyro.y[-1],mode='lines',line=dict(color=cl['hex'])))
-    """
+    
     else:
         fig = go.Figure(fig)
         x,y = one_orbit(sz,ho,btn)
         fig.add_trace(go.Scatter(x=x,y=y,mode='lines',line=dict(color=cl['hex'])))
-
+    """
     return fig
 
 if __name__ == '__main__':
