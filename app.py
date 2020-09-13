@@ -7,6 +7,7 @@ from dash.dependencies import Input, Output, State
 import dash_daq as daq
 
 import plotly.graph_objects as go
+import numpy as np
 
 def one_orbit(wheel_size,hole_pos,N):
 
