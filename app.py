@@ -184,7 +184,6 @@ def update_size_display(v1,v2):
     ]
 )
 def update_pyrograph(btn,fig,sz,ho,cl):
-    global pyro
     if btn == 0:
         fig = go.Figure(fig)
         fig.update_xaxes(range=[-1.,1.])
