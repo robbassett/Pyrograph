@@ -214,7 +214,8 @@ def update_pyrograph(btn,fig,sz,ho,cl):
         
     else:
         fig = go.Figure(fig)
-        pyro.one_orbit()
+        pyro = Pyrograph(hole=ho,inner_frac=sz)
+        for i in range(btn+1): pyro.one_orbit()
         fig.add_trace(go.Scatter(x=pyro.x[-1],y=pyro.y[-1],mode='lines',line=dict(color=cl['hex'])))
 
     return fig
