@@ -1,4 +1,4 @@
-from Pyrograph import *
+#from Pyrograph import *
 
 import dash
 import dash_core_components as dcc
@@ -7,6 +7,25 @@ from dash.dependencies import Input, Output, State
 import dash_daq as daq
 
 import plotly.graph_objects as go
+
+def one_orbit(wheel_size,hole_pos,N):
+
+    r = wheel_size
+    rho = wheel_size*hole_pos
+
+    dm = divmod(1.,(1.-r))
+    orb = 2.*np.pi*(dm[0]-1)
+    if orb == 0:
+        orb = 2.*np.pi
+
+    theta = np.linspace(float(N)*orb,float(N+1)*orb,1000)
+    cx = (1.-r)*np.cos(theta)
+    cy = (1.-r)*np.sin(theta)
+    itheta = ((-1.)*(1.-r)/r)*theta
+    ix = rho*np.cos(itheta)
+    iy = rho*np.sin(itheta)
+
+    return cx+ix,cy+iy
 
 app = dash.Dash(__name__)
 server = app.server
@@ -202,21 +221,24 @@ def update_pyrograph(btn,fig,sz,ho,cl):
             width=800,
             height=800
         )
-    
+
+    """
     elif btn == 1:
         fig = go.Figure(fig)
         pyro = Pyrograph(hole=ho,inner_frac=sz)
         for i in range(2): pyro.one_orbit()
-
         fig.add_trace(go.Scatter(x=pyro.x[-1],y=pyro.y[-1],mode='lines',line=dict(color=cl['hex'])))
-        
-        
         
     else:
         fig = go.Figure(fig)
         pyro = Pyrograph(hole=ho,inner_frac=sz)
         for i in range(btn+1): pyro.one_orbit()
         fig.add_trace(go.Scatter(x=pyro.x[-1],y=pyro.y[-1],mode='lines',line=dict(color=cl['hex'])))
+    """
+    else:
+        fig = go.Figure(fig)
+        x,y = one_orbit(sz,ho,btn)
+        fig.add_trace(go.Scatter(x=x,y=y,mode='lines',line=dict(color=cl['hex'])))
 
     return fig
 
