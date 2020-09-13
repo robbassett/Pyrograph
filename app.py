@@ -1,4 +1,4 @@
-#from Pyrograph import *
+from Pyrograph import *
 
 import dash
 import dash_core_components as dcc
