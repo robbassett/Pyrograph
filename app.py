@@ -30,7 +30,6 @@ def one_orbit(wheel_size,hole_pos,N):
 
 app = dash.Dash(__name__)
 server = app.server
-pyro = 0
 
 def description_card():
     """
@@ -39,12 +38,8 @@ def description_card():
     return html.Div(
         id="title-card",
         children=[
-            html.H3("Pyrograph (beta)"),
-            html.Div(
-                id="intro",
-                children="Create virtual spyrograph art.",
-            ),
-        ],
+            html.H4("Pyrograph (beta)"),
+        ]
     )
 
 def generate_about():
@@ -58,32 +53,32 @@ def generate_about():
         ],
     )
 
-def knob_card():
+def slider_card():
     """
     :return: A Div containing controls for Pyrograph.
     """
     return html.Div(
         id="knob-card",
         children=[
-            daq.Knob(
+            html.H5('Wheel Size'),
+            daq.Slider(
                 value=.66,
-                label='Wheel Size',
+                color='#4A9DFF',
                 id='size-input',
-                labelPosition='bottom',
-                size=95,
                 max=0.95,
                 min=0.05,
-                className='five columns',
+                step=0.01,
+                className='twelve columns',
             ),
-             daq.Knob(
+            html.H5('Hole Position'),
+             daq.Slider(
                 value=.66,
-                label='Hole Position',
+                color='#FF4A4C',
                 id='hole-input',
-                labelPosition='bottom',
-                size=95,
                 max=0.95,
                 min=0.05,
-                className='five columns',
+                step=0.01,
+                className='twelve columns',
             ),
         ],
     )
@@ -94,12 +89,14 @@ def led_card():
         children=[
             daq.LEDDisplay(
                 id="size-display",
+                color='#4A9DFF',
                 size=32,
                 value=0.66,
                 className="six columns",
             ),
             daq.LEDDisplay(
                 id="hole-display",
+                color='#FF4A4C',
                 size=32,
                 value=0.66,
                 className="six columns",
@@ -132,17 +129,25 @@ app.layout = html.Div(
                     dcc.Tab(label='Wheel Control', children=[
                         html.Div(
                             id='control-column',
-                            children=[description_card(), knob_card(), led_card()]
+                            children=[description_card(), slider_card(), led_card()]
                         ),
-                        html.Br(),
-                        html.Hr(),
                         html.Div(
-                            html.Button(
-                                'Spin!',
-                                id='sp_butt',
-                                n_clicks=0,
-                                className='twelve columns'
-                            ),
+                            children=[
+                                html.Button(
+                                    'Spin!',
+                                    id='sp_butt',
+                                    n_clicks=0,
+                                    className='five columns',
+                                    style={'marginTop':'1.5em'}
+                                ),
+                                html.Button(
+                                    'Undo!',
+                                    id='un_butt',
+                                    n_clicks=0,
+                                    className='five columns',
+                                    style={'marginTop':'1.5em'}
+                                ),
+                            ],
                         ),
                         html.Br(),
                         html.Div(
@@ -153,8 +158,8 @@ app.layout = html.Div(
                                     id="color-picker",
                                     label=" ",
                                     value=dict(hex="#0054A6"),
-                                    size=300,
-                                    className='twelve columns',
+                                    size=370,
+                                    className='eleven columns',
                                 ),
                             ]
                         ),
@@ -195,7 +200,10 @@ def update_size_display(v1,v2):
 
 @app.callback(
     Output('pyrograph','figure'),
-    [Input('sp_butt','n_clicks'),],
+    [
+        Input('sp_butt','n_clicks'),
+        Input('un_butt','n_clicks'),
+    ],
     state=[
         State('pyrograph','figure'),
         State('size-input','value'),
@@ -203,7 +211,7 @@ def update_size_display(v1,v2):
         State('color-picker','value'),
     ]
 )
-def update_pyrograph(btn,fig,sz,ho,cl):
+def update_pyrograph(btn,ubt,fig,sz,ho,cl):
     
     if btn == 0:
         fig = go.Figure(fig)
@@ -224,13 +232,23 @@ def update_pyrograph(btn,fig,sz,ho,cl):
             height=800
         )
 
-    
+    ctx = dash.callback_context
+    if not ctx.triggered:
+        pass
     else:
-        fig = go.Figure(fig)
-        x,y = one_orbit(sz,ho,btn)
-        fig.add_trace(go.Scatter(x=x,y=y,mode='lines',line=dict(color=cl['hex'])))
+        button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+        if button_id == 'un_butt':
+            fig['data'].pop()
+            fig = go.Figure(fig)
+            
+        else:
+            if btn != 0:
+                fig = go.Figure(fig)
+                x,y = one_orbit(sz,ho,btn-ubt)
+                fig.add_trace(go.Scatter(x=x,y=y,mode='lines',line=dict(color=cl['hex'])))
     
     return fig
+        
 
 if __name__ == '__main__':
     #app.run_server(host='127.0.0.1',debug=True)
