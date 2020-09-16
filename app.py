@@ -80,6 +80,16 @@ def slider_card():
                 step=0.01,
                 className='twelve columns',
             ),
+            html.H5('Line Width'),
+             daq.Slider(
+                value=1,
+                color='#02A90E',
+                id='line-width',
+                max=10,
+                min=1,
+                step=0.5,
+                className='twelve columns',
+            ),
         ],
     )
 
@@ -92,14 +102,21 @@ def led_card():
                 color='#4A9DFF',
                 size=32,
                 value=0.66,
-                className="six columns",
+                className="four columns",
             ),
             daq.LEDDisplay(
                 id="hole-display",
                 color='#FF4A4C',
                 size=32,
                 value=0.66,
-                className="six columns",
+                className="four columns",
+            ),
+            daq.LEDDisplay(
+                id="width-display",
+                color='#02A90E',
+                size=32,
+                value=0.66,
+                className="four columns",
             ),
         ],
         className='led-displays',
@@ -108,12 +125,6 @@ def led_card():
 app.layout = html.Div(
     id="app-container",
     children=[
-        # Banner
-        html.Div(
-            id="banner",
-            className="banner",
-            children=["/assets/dash-logo-new.png"],
-        ),
         # Left column
         html.Div(
             id="left-column",
@@ -157,7 +168,7 @@ app.layout = html.Div(
                                 daq.ColorPicker(
                                     id="color-picker",
                                     label=" ",
-                                    value=dict(hex="#0054A6"),
+                                    value=dict(rgb=dict(r=1,g=105,b=200,a=1)),
                                     size=370,
                                     className='eleven columns',
                                 ),
@@ -188,15 +199,22 @@ app.layout = html.Div(
     [
         Output("size-display", "value"),
         Output("hole-display", "value"),
-        Output('sp_butt','n_clicks')
+        Output('sp_butt','n_clicks'),
     ],
     [
         Input("size-input", "value"),
-        Input("hole-input", "value")
+        Input("hole-input", "value"),
     ]
 )
 def update_size_display(v1,v2):
     return v1,v2,0
+
+@app.callback(
+    Output('width-display','value'),
+    Input('line-width','value')
+)
+def update_lw_display(v1):
+    return v1
 
 @app.callback(
     Output('pyrograph','figure'),
@@ -208,10 +226,11 @@ def update_size_display(v1,v2):
         State('pyrograph','figure'),
         State('size-input','value'),
         State('hole-input','value'),
+        State('line-width','value'),
         State('color-picker','value'),
     ]
 )
-def update_pyrograph(btn,ubt,fig,sz,ho,cl):
+def update_pyrograph(btn,ubt,fig,sz,ho,wi,cl):
     
     if btn == 0:
         fig = go.Figure(fig)
@@ -244,8 +263,11 @@ def update_pyrograph(btn,ubt,fig,sz,ho,cl):
         else:
             if btn != 0:
                 fig = go.Figure(fig)
+                col = cl['rgb']
+                t = [col['r'],col['g'],col['b'],col['a']]
+                rgba = f'rgba({t[0]},{t[1]},{t[2]},{t[3]})'
                 x,y = one_orbit(sz,ho,btn-ubt)
-                fig.add_trace(go.Scatter(x=x,y=y,mode='lines',line=dict(color=cl['hex'])))
+                fig.add_trace(go.Scatter(x=x,y=y,mode='lines',line=dict(color=rgba,width=wi)))
     
     return fig
         
