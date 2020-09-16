@@ -207,9 +207,8 @@ app.layout = html.Div(
 def update_size_display(v1,v2):
     return v1,v2,0
 
-@app.callback(
-    Output('width-display','value'),
-    Input('line-width','value')
+@app.callback(Output('width-display','value'),
+    [Input('line-width','value')]
 )
 def update_lw_display(v1):
     return v1
