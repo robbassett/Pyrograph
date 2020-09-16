@@ -27,7 +27,7 @@ def one_orbit(wheel_size,hole_pos,N):
     return cx+ix,cy+iy
 
 app = dash.Dash(__name__)
-server = app.server
+#server = app.server
 
 def description_card():
     """
@@ -271,5 +271,5 @@ def update_pyrograph(btn,ubt,fig,sz,ho,wi,cl):
         
 
 if __name__ == '__main__':
-    #app.run_server(host='127.0.0.1',debug=True)
-    app.run_server()
+    app.run_server(host='127.0.0.1',debug=True)
+    #app.run_server()
