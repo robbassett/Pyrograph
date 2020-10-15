@@ -67,7 +67,9 @@
   .one.column,
   .one.columns                    { width: 4.66666666667%; }
   .two.columns                    { width: 13.3333333333%; }
-  .three.columns                  { width: 22%;            }
+  .threep.columns                  { width: 23%; margin-left: 7%            }
+  .threet.columns                  { width: 23%; margin-left: 15%            }
+  .three.columns                  { width: 20%;            }
   .four.columns                   { width: 30.6666666667%; }
   .five.columns                   { width: 45.3333333333%; }
   .six.columns                    { width: 40%; margin-left: 8%     }
@@ -130,7 +132,7 @@ body {
   line-height: 1.6;
   font-weight: 400;
   font-family: "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: rgb(50, 50, 50); }
+  color: (77,127,246); }
 
 
 /* Typography
