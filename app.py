@@ -35,7 +35,7 @@ def one_orbit(wheel_size,hole_pos,N,theta_start=0.,revs=1.):
     return vs[0],vs[1]
 
 app = dash.Dash(__name__)
-#server = app.server
+server = app.server
 
 def build_banner():
     return html.Div(
@@ -166,16 +166,16 @@ def update_size_display(v1,v2,v3):
 
 @app.callback(
     Output('width-display','value'),
-    Input('line-width','value')
+    [Input('line-width','value')]
 )
 def update_lw_display(v1):
     return v1
 
 @app.callback(
     Output('revs-display','value'),
-    Input('revs','value')
+    [Input('revs','value')]
 )
-def update_lw_display(v1):
+def update_rev_display(v1):
     return v1
 
 @app.callback(
@@ -271,5 +271,5 @@ def update_wheel_im(whs,hos):
     return fig
 
 if __name__ == '__main__':
-    app.run_server(host='127.0.0.1',debug=True)
-    #app.run_server()
+    #app.run_server(host='127.0.0.1',debug=True)
+    app.run_server()
