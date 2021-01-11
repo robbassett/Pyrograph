@@ -1,4 +1,4 @@
-![](pyrograph_logo.png)
+![](/assets/pyrograph_logo.png)
 
 A Plotly Dash App inspired by the classic drawing toy Spirograph. 
 
